@@ -59,6 +59,26 @@
 
 <script>
 
+  //event is an object with a lot of data, "keyCode" is one of them
+  // event.keyCode gives us the key code of the pressed key
+  function playSound(event) {
+    const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`); // will be used to add audio effect on it
+    const key = document.querySelector(`.key[data-key="${event.keyCode}"`); // will be used to add visual effect on it
+    // Sound
+    if (!audio) return; // stops the function if no audio is found for the pressed key
+    audio.currentTime = 0 // rewind to the start if we press the key while the audio is already playing
+    audio.play()
+    // Visual effect
+    key.classList.add('playing'); // .playing is a CSS class in our CCS file that adds scale, border color, etc...
+  }
+  function removeTransition(event) {
+    if (event.propertyName !== 'transform') return; // skip it if it's not a transform
+    this.classList.remove('playing')
+  }
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+  window.addEventListener('keydown', playSound)
+
 </script>
 
 
